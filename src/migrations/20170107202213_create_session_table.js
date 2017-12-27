@@ -10,7 +10,8 @@ export function up(knex) {
     table
       .integer('user_id')
       .unique()
-      .references('users.id');
+      .references('users.id')
+      .onDelete('CASCADE');
     table.string('refresh_token');
   });
 }

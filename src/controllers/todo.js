@@ -1,14 +1,10 @@
 import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
 import * as todoService from '../services/todoService';
-import { findTodo, todoValidator } from '../validators/todoValidator';
-import tokenValidator from '../validators/tokenValidator';
-import * as checkToken from '../middlewares/checkToken';
 import { checkAccessToken } from '../middlewares/checkToken';
-
+import { findTodo, todoValidator } from '../validators/todoValidator';
 
 const router = Router();
-
 
 /**
  * GET /api/users/:id/todos
@@ -34,11 +30,10 @@ router.get('/search', (req, res, next) => {
   }
 });
 
-
 /**
  * GET /api/todos/:id
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', checkAccessToken, (req, res, next) => {
   todoService
     .getTodo(req.params.id)
     .then(data => res.json({ data }))
@@ -48,7 +43,7 @@ router.get('/:id', (req, res, next) => {
 /**
  * POST /api/users/:id/todos
  */
-router.post('/',checkAccessToken, (req, res, next) => {
+router.post('/', checkAccessToken, (req, res, next) => {
   todoService
     .createTodo(req.body)
     .then(data => res.status(HttpStatus.CREATED).json({ data }))
@@ -74,7 +69,5 @@ router.delete('/:id', findTodo, (req, res, next) => {
     .then(data => res.status(HttpStatus.NO_CONTENT).json({ data }))
     .catch(err => next(err));
 });
-
-
 
 export default router;

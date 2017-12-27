@@ -60,5 +60,4 @@ router.use('/users', usersController);
 router.use('/login', loginController);
 router.use('/logout', logoutController);
 
-
 export default router;

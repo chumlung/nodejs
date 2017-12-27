@@ -21,7 +21,6 @@ router.post('/', (req, res, next) => {
     .createSession(user.user_id, refreshToken)
     .then(data => res.send(accessToken))
     .catch(err => next(err));
-
 });
 
 export default router;

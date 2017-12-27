@@ -9,7 +9,7 @@ import Todo from '../models/todo';
  */
 export function getAllTodos(userID) {
   return Todo.query({ where: { user_id: userID } }).fetchAll({
-    withRelated:(['tags'])}
+    withRelated: ( ['tags']) }
   ).then((todos)=>{
     return todos;
   });
@@ -50,7 +50,7 @@ export function createTodo(todo) {
   return new Todo({ userID: todo.userID, details: todo.details }).save().then(result => {
     result.tags().attach(todo.tags);
     result.refresh();
-  })
+  });
 }
 
 /**

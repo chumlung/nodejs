@@ -3,8 +3,6 @@ import validate from '../utils/validate';
 import * as todoService from '../services/todoService';
 
 const SCHEMA = {
-
-
   details: Joi.string()
     .label('Details')
     .max(200)
@@ -12,8 +10,7 @@ const SCHEMA = {
 
   userID: Joi.number()
     .integer()
-    .label('userID'),
-
+    .label('userID')
 };
 
 /**
