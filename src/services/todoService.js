@@ -7,8 +7,8 @@ import Todo from '../models/todo';
  *
  * @return {Promise}
  */
-export function getAllTodos(userID) {
-  return Todo.query({ where: { user_id: userID } }).fetchAll({
+export function getAllTodos(categoryID) {
+  return Todo.query({ where: { category_id: categoryID } }).fetchAll({
     withRelated: ( ['tags']) }
   ).then((todos)=>{
     return todos;
@@ -47,9 +47,12 @@ export function getSearchedTodo(userId, searchValue, page) {
  * @return {Promise}
  */
 export function createTodo(todo) {
-  return new Todo({ userID: todo.userID, details: todo.details }).save().then(result => {
-    result.tags().attach(todo.tags);
-    result.refresh();
+  const TAGS = [...todo.tags];
+
+  return new Todo({ userID: todo.userID, categoryID: todo.categoryID, details: todo.details, priority: todo.priority, date: todo.date }).save().then(todo => {
+    todo.tags().attach(TAGS);
+
+    return todo.refresh();
   });
 }
 
@@ -61,7 +64,7 @@ export function createTodo(todo) {
  * @return {Promise}
  */
 export function updateTodo(id, todo) {
-  return new Todo({ id }).save({ details: todo.details }).then(todo => todo.refresh());
+  return new Todo({ id }).save({ details: todo.details, categoryID: todo.categoryID, priority: todo.priority, date: todo.date }).then(todo => todo.refresh());
 }
 
 /**

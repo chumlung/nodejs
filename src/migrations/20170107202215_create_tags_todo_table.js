@@ -1,5 +1,5 @@
 /**
- * Create tags table.
+ * Create tags_todo table.
  *
  * @param  {object} knex
  * @return {Promise}

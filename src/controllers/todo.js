@@ -2,7 +2,7 @@ import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
 import * as todoService from '../services/todoService';
 import { checkAccessToken } from '../middlewares/checkToken';
-import { findTodo, todoValidator } from '../validators/todoValidator';
+import { findTodo } from '../validators/todoValidator';
 
 const router = Router();
 
@@ -11,10 +11,11 @@ const router = Router();
  */
 router.get('/', (req, res, next) => {
   todoService
-    .getAllTodos(req.body.userID)
+    .getAllTodos(req.body.categoryID)
     .then(data => res.json({ data }))
     .catch(err => next(err));
 });
+
 router.get('/search', (req, res, next) => {
   let page = 1;
   if (req.query.page) {
@@ -43,7 +44,7 @@ router.get('/:id', checkAccessToken, (req, res, next) => {
 /**
  * POST /api/users/:id/todos
  */
-router.post('/', checkAccessToken, (req, res, next) => {
+router.post('/', (req, res, next) => {
   todoService
     .createTodo(req.body)
     .then(data => res.status(HttpStatus.CREATED).json({ data }))
@@ -53,7 +54,7 @@ router.post('/', checkAccessToken, (req, res, next) => {
 /**
  * PUT /api/users/:id/todos/:id
  */
-router.put('/:id', findTodo, todoValidator, (req, res, next) => {
+router.put('/:id', checkAccessToken, findTodo, (req, res, next) => {
   todoService
     .updateTodo(req.params.id, req.body)
     .then(data => res.json({ data }))
@@ -63,10 +64,10 @@ router.put('/:id', findTodo, todoValidator, (req, res, next) => {
 /**
  * DELETE /api/todos/:id
  */
-router.delete('/:id', findTodo, (req, res, next) => {
+router.delete('/:id', checkAccessToken, findTodo, (req, res, next) => {
   todoService
     .deleteTodo(req.params.id)
-    .then(data => res.status(HttpStatus.NO_CONTENT).json({ data }))
+    .then(res.json({ deleteID: req.params.id }))
     .catch(err => next(err));
 });
 

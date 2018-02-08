@@ -4,8 +4,6 @@ import usersController from './controllers/users';
 import loginController from './controllers/login';
 import logoutController from './controllers/logout';
 
-
-
 /**
  * Contains all API routes for the application.
  */

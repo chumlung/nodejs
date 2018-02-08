@@ -10,7 +10,19 @@ const SCHEMA = {
 
   userID: Joi.number()
     .integer()
-    .label('userID')
+    .label('userID'),
+
+  categoryID: Joi.number()
+    .integer()
+    .label('categoryID'),
+
+  date: Joi.string()
+    .label('date')
+    .max(10),
+
+  priority: Joi.string()
+    .label('priority')
+    .required()
 };
 
 /**

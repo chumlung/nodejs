@@ -26,6 +26,16 @@ export function getUser(id) {
   });
 }
 
+export function getUserUsingEmail(email) {
+  return new User({ email }).fetch().then(user => {
+    if (!user) {
+      throw new Boom.notFound('User not found');
+    }
+
+    return user;
+  });
+}
+
 /**
  * Create new user.
  *

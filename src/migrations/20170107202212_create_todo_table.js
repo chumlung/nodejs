@@ -11,7 +11,13 @@ export function up(knex) {
       .integer('user_id')
       .references('users.id')
       .onDelete('CASCADE');
+    table
+      .integer('category_id')
+      .references('categories.id')
+      .onDelete('CASCADE');
     table.string('details').notNull();
+    table.string('priority').notNull();
+    table.dateTime('date').notNull();
   });
 }
 

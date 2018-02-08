@@ -4,22 +4,28 @@
 import jwt from 'jsonwebtoken';
 import { Router } from 'express';
 import * as sessionService from '../services/sessionService';
+import * as userService from '../services/userService';
 
 const router = Router();
 
 router.post('/', (req, res, next) => {
   let user = {
-    user_id: req.body.user_id
+    user_email: req.body.user_email
   };
-  let accessToken = jwt.sign(user, process.env.ACCESS_SALT, {
-    expiresIn: 300
-  });
-  let refreshToken = jwt.sign(user, process.env.REFRESH_SALT, {
-    expiresIn: 3600
-  });
-  sessionService
-    .createSession(user.user_id, refreshToken)
-    .then(data => res.send(accessToken))
+  userService
+    .getUserUsingEmail(user.user_email)
+    .then(data => {
+      let accessToken = jwt.sign(user, process.env.ACCESS_SALT, {
+        expiresIn: 30
+      });
+      let refreshToken = jwt.sign(user, process.env.REFRESH_SALT, {
+        expiresIn: 3600
+      });
+      sessionService
+        .createSession(data.attributes.id, refreshToken)
+        .then(data => res.json({ data, accessToken: accessToken }))
+        .catch(err => next(err));
+    })
     .catch(err => next(err));
 });
 

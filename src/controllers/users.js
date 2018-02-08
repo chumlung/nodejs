@@ -3,7 +3,7 @@ import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
 import * as userService from '../services/userService';
 import { findUser, userValidator } from '../validators/userValidator';
-import todoController from './todo';
+import categoryController from './categories';
 import refreshController from '../controllers/refresh';
 const router = Router();
 
@@ -57,10 +57,10 @@ router.delete('/:id', findUser, (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.use('/:id/todos', findUser, (req, res, next) => {
+router.use('/:id/categories', findUser, (req, res, next) => {
   req.body.userID = req.params.id;
   next();
-}, todoController);
+}, categoryController);
 
 router.use('/:id/refresh',findUser,(req,res,next)=>{
   req.body.userID = req.params.id;
